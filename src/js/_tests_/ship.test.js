@@ -6,5 +6,11 @@ describe('Ship Class', () => {
     ship.hit();
     expect(ship.hits).toBe(1);
   });
+  test('ships properly sink', () => {
+    const ship = new Ship(2);
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(true);
+  });
 });
 
