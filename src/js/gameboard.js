@@ -32,7 +32,6 @@ export default class Gameboard {
   receiveAttack(coord) {
     const [x, y] = coord;
     const ship = this.board[x][y]
-
     if(ship) {
       ship.hit()
       this.shipParts -= 1;

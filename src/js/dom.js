@@ -21,4 +21,6 @@ boards.forEach((b) => {
 
 export const playerBoard = document.getElementById('player-board');
 export const enemyBoard = document.getElementById('computer-board');
-export const tiles = document.querySelectorAll('#computer-board > .tile')
+export const enemyTiles = document.querySelectorAll('#computer-board > .tile');
+export const playerTiles = document.querySelectorAll('#player-board > .tile');
+export const turn = document.getElementById('turn-indicator');

@@ -11,28 +11,40 @@ export default class Game {
     this.player = new Player('player', this.enemyBoard, this.playerBoard);
     this.computer = new Player('comp', this.playerBoard, this.enemyBoard);
     this.eventListeners = {};
+    this.currentPlayer = this.player;
   }
 
   init() {
-    this.player.setBoard([[[2, 1], new Ship(2)]])
+    this.player.setBoard([[[6, 5], new Ship(3)]])
     this.computer.setBoard([[[6, 5], new Ship(3)]])
-    // this.startLoop();
+    this.on('turnEnd', (currentPlayer) => {
+      if (currentPlayer.name === 'comp') {
+        this.computerAttacks()
+      }
+    })
   }
-
-  // startLoop() {
-    
-  // }
 
   playerAttacks(coord, id) {
     const hit = this.player.attackEnemy(coord);
     if (hit) this.emit('hit', id);
     else this.emit('miss', id);
+    this.emit('turnEnd', this.computer)
   }
 
-  // computerAttacks() {
+  computerAttacks() {
+    const hit = this.computer.chooseAttack();
+    const id = this.computer.targetTile[0] * 10 + this.computer.targetTile[1];
+    if (hit) this.emit('hit', id);
+    else this.emit('miss', id);
+    this.emit('turnEnd', this.player)
+  }
 
-  // }
 
+
+
+
+
+  // pub-sub
 
   // Subscribe to an event
   on(event, listener) {
@@ -51,8 +63,7 @@ export default class Game {
     }
   }
 
-
-  // Emit listenres of the event
+  // Emit listeners of the event
   emit(event, data) {
     if (this.eventListeners[event]) {
       this.eventListeners[event].forEach((listener) => {

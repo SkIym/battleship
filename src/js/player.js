@@ -6,6 +6,7 @@ export default class Player {
     this.playerBoard = playerBoard;
     this.moves = moves;
     this.targetShip = null;
+    this.targetTile = null;
   }
 
   setBoard(pieces) {
@@ -21,12 +22,12 @@ export default class Player {
 
   chooseAttack() {
     const coord = [parseInt(Math.random() * 10, 10), parseInt(Math.random() * 10, 10)]
-    const done = this.moves.find((move) => {
-      if (move[0] === coord[0] && move[1] === coord[1]) return move
-      return undefined
-    })
-    if(!done) this.attackEnemy(coord);
-
+    const done = this.moves.find((move) => move[0] === coord[0] && move[1] === coord[1]);
+    if(!done) {
+      this.targetTile = coord;
+      this.moves.push(coord)
+      return this.attackEnemy(coord);
+    } 
+    return this.chooseAttack();
   }
-
 }
