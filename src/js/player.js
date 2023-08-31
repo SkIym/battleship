@@ -1,10 +1,11 @@
 
 export default class Player {
-  constructor(name, enemyBoard, playerBoard) {
+  constructor(name, enemyBoard, playerBoard, moves = []) {
     this.name = name;
     this.enemyBoard = enemyBoard;
     this.playerBoard = playerBoard;
-    this.moves = [];
+    this.moves = moves;
+    this.targetShip = null;
   }
 
   setBoard(pieces) {
@@ -15,11 +16,10 @@ export default class Player {
   }
 
   attackEnemy(coord) {
-    this.enemyBoard.receiveAttack(coord)
+    return this.enemyBoard.receiveAttack(coord)
   }
 
   chooseAttack() {
-    coord = 
     const coord = [parseInt(Math.random() * 10, 10), parseInt(Math.random() * 10, 10)]
     const done = this.moves.find((move) => {
       if (move[0] === coord[0] && move[1] === coord[1]) return move
@@ -29,7 +29,4 @@ export default class Player {
 
   }
 
-  // continueAttack() {
-  //   // If previous turnwas successful
-  // }
 }

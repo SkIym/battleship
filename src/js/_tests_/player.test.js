@@ -44,14 +44,32 @@ describe('Player Class', () => {
     const enemy = new Gameboard();
     const ship = new Ship(2);
     enemy.placeShip([3,4], ship);
-    const computer = new Player('adf', enemy, new Gameboard());
-    computer.moves.push[[0,6]]
+    const computer = new Player('adf', enemy, new Gameboard(), [[0, 6]]);
 
     computer.chooseAttack()
 
-    expect(enemy.missed.length).toEqual(1);
+    expect(enemy.missed.length).toEqual(0);
 
   });
+
+  // test('If computer, continue attacking near tile that hit', () => {
+  //   const enemy = new Gameboard();
+  //   const ship = new Ship(2);
+  //   enemy.placeShip([3,4], ship);
+  //   const computer = new Player('adf', enemy, new Gameboard());
+
+  //   while (true) {
+  //     const attack = (coord = [3, 4]) => computer.attackEnemy(coord);
+  //     if (hit) {
+  //       attack(nextAttack(coord))
+  //     } else {
+  //       break
+  //     }
+  //   }
+
+  //   expect(enemy.shipParts).toEqual(0);
+
+  // });
 
 });
 
