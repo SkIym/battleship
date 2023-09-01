@@ -10,5 +10,11 @@ export default class GameManager {
   init() {
     this.game.init();
     this.domManager.init();
+    this.game.on('over', (winner) => {
+      this.domManager.disableBoard(winner);
+    })
+    this.domManager.on('reset', () => {
+    })
   }
+
 }

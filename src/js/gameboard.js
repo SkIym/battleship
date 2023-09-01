@@ -17,6 +17,13 @@ export default class Gameboard {
     }
   }
 
+  reset() {
+    this.board = [];
+    this.missed = [];
+    this.shipParts = 0;
+    this.init()
+  }
+
   placeShip(coord, ship) {
     const {length} = ship;
     const [x, y] = coord;

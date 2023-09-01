@@ -7,6 +7,7 @@ export default class BoardRenderer {
     this.playerBoard = dom.playerBoard;
     this.tiles = dom.enemyTiles;
     this.turnUI = dom.turn;
+    this.eventListeners = {};
   }
 
   init() {
@@ -34,6 +35,12 @@ export default class BoardRenderer {
     this.game.on('turnEnd', (currentPlayer) => {
       this.updateTurnUI(currentPlayer);
       this.togglePlay(currentPlayer);
+    });
+    
+
+    dom.again.style.display = 'none';
+    dom.again.addEventListener('click', () => {
+      this.emit('reset')
     })
   }
 
@@ -46,11 +53,11 @@ export default class BoardRenderer {
   }
 
   toggleTiles() {
+    console.log('wtf')
     this.tiles = (this.tiles === dom.enemyTiles) ? dom.playerTiles : dom.enemyTiles 
   }
 
   togglePlay(currentPlayer) {
-    console.log(currentPlayer.name)
     if(currentPlayer.name === 'player') {
       this.enemyBoard.style.pointerEvents = 'auto';
       this.playerBoard.style.pointerEvents = 'none';
@@ -58,7 +65,6 @@ export default class BoardRenderer {
       this.enemyBoard.style.pointerEvents = 'none';
       this.playerBoard.style.pointerEvents = 'auto';
     }
-    
   }
 
   updateTurnUI(currentPlayer) {
@@ -66,6 +72,50 @@ export default class BoardRenderer {
       this.turnUI.textContent = "Player's Turn"
     } else {
       this.turnUI.textContent = "Computer's Turn"
+    }
+  }
+
+  disableBoard(winner) {
+    this.turnUI.textContent = `${winner} wins!`;
+    this.enemyBoard.style.pointerEvents = 'none';
+    this.playerBoard.style.pointerEvents = 'none';
+    dom.again.style.display = 'block';
+  }
+
+  resetBoard() {
+    [dom.enemyTiles, dom.playerTiles].forEach((board) => {
+      board.forEach((tile) => {
+        tile.style.backgroundColor = 'white';
+        tile.style.pointerEvents = 'auto';
+      })
+    })
+    this.turnUI.textContent = 'BATTLESHIP';
+    this.playerBoard.style.pointerEvents = 'none';
+  }
+
+  // Subscribe to an event
+  on(event, listener) {
+    if (!this.eventListeners[event]) {
+      this.eventListeners[event] = [];
+    }
+    this.eventListeners[event].push(listener);
+  }
+
+  // Unsubscribe from an event
+  off(event, listener) {
+    if (this.eventListeners[event]) {
+      this.eventListeners[event] = this.eventListeners[event].filter(
+        (existingListener) => existingListener !== listener
+      );
+    }
+  }
+
+  // Emit listeners of the event
+  emit(event, data) {
+    if (this.eventListeners[event]) {
+      this.eventListeners[event].forEach((listener) => {
+        listener(data);
+      });
     }
   }
 

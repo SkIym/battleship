@@ -9,6 +9,12 @@ export default class Player {
     this.targetTile = null;
   }
 
+  reset() {
+    this.moves = [];
+    this.targetShip = null;
+    this.targetTile = null;
+  }
+
   setBoard(pieces) {
     pieces.forEach(piece => {
       const [coord, ship] = piece;

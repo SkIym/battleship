@@ -14,9 +14,19 @@ export default class Game {
     this.currentPlayer = this.player;
   }
 
+  reset() {
+    this.playerBoard.reset();
+    this.enemyBoard.reset();
+    this.player.reset();
+    this.computer.reset();
+    this.currentPlayer = this.player;
+    this.eventListeners = {};
+  }
+
   init() {
-    this.player.setBoard([[[6, 5], new Ship(3)]])
+    this.player.setBoard([[[5, 1], new Ship(1)]])
     this.computer.setBoard([[[6, 5], new Ship(3)]])
+    this.computer.setBoard([[[4, 3], new Ship(2)]])
     this.on('turnEnd', (currentPlayer) => {
       if (currentPlayer.name === 'comp') {
         setTimeout(() => this.computerAttacks(), 400)
@@ -25,24 +35,45 @@ export default class Game {
   }
 
   playerAttacks(coord, id) {
+    console.log('i attk')
     const hit = this.player.attackEnemy(coord);
-    if (hit) this.emit('hit', id);
-    else this.emit('miss', id);
-    this.emit('turnEnd', this.computer)
+    const gameOver = this.registerAttack(hit, id);
+    if(!gameOver) {
+      this.currentPlayer = this.computer;
+      this.signalTurnEnd();
+    }
   }
 
   computerAttacks() {
+    console.log('wers')
     const hit = this.computer.chooseAttack();
     const id = this.computer.targetTile[0] * 10 + this.computer.targetTile[1];
-    if (hit) this.emit('hit', id);
-    else this.emit('miss', id);
-    this.emit('turnEnd', this.player)
+    const gameOver = this.registerAttack(hit, id);
+    if(!gameOver) {
+      this.currentPlayer = this.player;
+      this.signalTurnEnd();
+    }
   }
 
+  registerAttack(hit, id) {
+    if (hit) {
+      this.emit('hit', id);
+    }
+    else this.emit('miss', id);
+    return this.isGameOver();
+  }
 
+  signalTurnEnd() {
+    this.emit('turnEnd', this.currentPlayer)
+  }
 
-
-
+  isGameOver() {
+    const win = this.playerBoard.shipsHaveSunk() || this.enemyBoard.shipsHaveSunk()
+    if (win) {
+      this.emit('over', this.currentPlayer.name)
+      return true
+    }
+  }
 
   // pub-sub
 
