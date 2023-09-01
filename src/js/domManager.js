@@ -71,6 +71,7 @@ export default class BoardRenderer {
   }
 
   togglePlay(currentPlayer) {
+    console.log(this.game.currentPlayer.name)
     if(currentPlayer.name === 'player') {
       this.enemyBoard.style.pointerEvents = 'auto';
       this.playerBoard.style.pointerEvents = 'none';
@@ -98,12 +99,13 @@ export default class BoardRenderer {
   resetBoard() {
     [dom.enemyTiles, dom.playerTiles].forEach((board) => {
       board.forEach((tile) => {
-        tile.style.backgroundColor = 'white';
-        tile.style.pointerEvents = 'auto';
+        tile.style.backgroundColor = '';
+        tile.style.removeProperty('pointer-events');
       })
     })
     this.turnUI.textContent = 'BATTLESHIP';
     this.playerBoard.style.pointerEvents = 'none';
+    this.enemyBoard.style.pointerEvents = 'auto';
   }
 
   // Subscribe to an event

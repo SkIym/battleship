@@ -29,6 +29,7 @@ export default class Gameboard {
     const [x, y] = coord;
 
     if (y + length - 1 > 9) return;
+    
 
     for(let i = 0; i < length; i += 1) {
       this.board[x][y+i] = ship;

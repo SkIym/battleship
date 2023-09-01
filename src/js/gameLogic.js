@@ -73,6 +73,14 @@ export default class Game {
     }
   }
 
+  placePlayerShips() {
+
+  }
+
+  placeComputerShips() {
+
+  }
+
   // pub-sub
 
   // Subscribe to an event
