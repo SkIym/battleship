@@ -19,7 +19,7 @@ export default class Game {
     this.computer.setBoard([[[6, 5], new Ship(3)]])
     this.on('turnEnd', (currentPlayer) => {
       if (currentPlayer.name === 'comp') {
-        this.computerAttacks()
+        setTimeout(() => this.computerAttacks(), 400)
       }
     })
   }

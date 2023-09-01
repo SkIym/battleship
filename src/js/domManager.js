@@ -31,6 +31,10 @@ export default class BoardRenderer {
       this.renderMiss(id)
       this.toggleTiles();
     });
+    this.game.on('turnEnd', (currentPlayer) => {
+      this.updateTurnUI(currentPlayer);
+      this.togglePlay(currentPlayer);
+    })
   }
 
   renderHit(id) {
@@ -43,6 +47,26 @@ export default class BoardRenderer {
 
   toggleTiles() {
     this.tiles = (this.tiles === dom.enemyTiles) ? dom.playerTiles : dom.enemyTiles 
+  }
+
+  togglePlay(currentPlayer) {
+    console.log(currentPlayer.name)
+    if(currentPlayer.name === 'player') {
+      this.enemyBoard.style.pointerEvents = 'auto';
+      this.playerBoard.style.pointerEvents = 'none';
+    } else {
+      this.enemyBoard.style.pointerEvents = 'none';
+      this.playerBoard.style.pointerEvents = 'auto';
+    }
+    
+  }
+
+  updateTurnUI(currentPlayer) {
+    if(currentPlayer.name === 'player') {
+      this.turnUI.textContent = "Player's Turn"
+    } else {
+      this.turnUI.textContent = "Computer's Turn"
+    }
   }
 
 }
