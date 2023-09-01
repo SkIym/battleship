@@ -10,6 +10,14 @@ export default class BoardRenderer {
     this.eventListeners = {};
   }
 
+  reset(game) {
+    this.tiles = dom.enemyTiles;
+    this.eventListeners = {};
+    this.resetBoard();
+    this.game = game;
+    this.subscribe();
+  }
+
   init() {
     let tileNo = 0;
     this.tiles.forEach((tile) => {
@@ -24,6 +32,10 @@ export default class BoardRenderer {
       });
       tileNo += 1;
     });
+    this.subscribe();
+  }
+
+  subscribe() {
     this.game.on('hit', (id) => {
       this.renderHit(id);
       this.toggleTiles();
@@ -36,7 +48,9 @@ export default class BoardRenderer {
       this.updateTurnUI(currentPlayer);
       this.togglePlay(currentPlayer);
     });
-    
+    this.game.on('over', (winner) => {
+      this.disableBoard(winner);
+    })
 
     dom.again.style.display = 'none';
     dom.again.addEventListener('click', () => {
@@ -53,7 +67,6 @@ export default class BoardRenderer {
   }
 
   toggleTiles() {
-    console.log('wtf')
     this.tiles = (this.tiles === dom.enemyTiles) ? dom.playerTiles : dom.enemyTiles 
   }
 

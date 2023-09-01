@@ -35,7 +35,6 @@ export default class Game {
   }
 
   playerAttacks(coord, id) {
-    console.log('i attk')
     const hit = this.player.attackEnemy(coord);
     const gameOver = this.registerAttack(hit, id);
     if(!gameOver) {
@@ -45,7 +44,6 @@ export default class Game {
   }
 
   computerAttacks() {
-    console.log('wers')
     const hit = this.computer.chooseAttack();
     const id = this.computer.targetTile[0] * 10 + this.computer.targetTile[1];
     const gameOver = this.registerAttack(hit, id);
