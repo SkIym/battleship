@@ -8,9 +8,10 @@ export default class BoardRenderer {
     this.tiles = dom.enemyTiles;
     this.turnUI = dom.turn;
     this.eventListeners = {};
+    this.setUpTiles();
   }
 
-  reset(game) {
+  init(game) {
     this.tiles = dom.enemyTiles;
     this.eventListeners = {};
     this.resetBoard();
@@ -18,7 +19,7 @@ export default class BoardRenderer {
     this.subscribe();
   }
 
-  init() {
+  setUpTiles() {
     let tileNo = 0;
     this.tiles.forEach((tile) => {
       const id = tileNo;
@@ -32,7 +33,7 @@ export default class BoardRenderer {
       });
       tileNo += 1;
     });
-    this.subscribe();
+    dom.again.textContent = 'Start';
   }
 
   subscribe() {
@@ -52,8 +53,9 @@ export default class BoardRenderer {
       this.disableBoard(winner);
     })
 
-    dom.again.style.display = 'none';
+   
     dom.again.addEventListener('click', () => {
+      dom.again.style.display = 'none';
       this.emit('reset')
     })
   }
@@ -71,7 +73,6 @@ export default class BoardRenderer {
   }
 
   togglePlay(currentPlayer) {
-    console.log(this.game.currentPlayer.name)
     if(currentPlayer.name === 'player') {
       this.enemyBoard.style.pointerEvents = 'auto';
       this.playerBoard.style.pointerEvents = 'none';
@@ -94,6 +95,7 @@ export default class BoardRenderer {
     this.enemyBoard.style.pointerEvents = 'none';
     this.playerBoard.style.pointerEvents = 'none';
     dom.again.style.display = 'block';
+    dom.again.textContent = 'Play Again';
   }
 
   resetBoard() {

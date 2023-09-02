@@ -9,16 +9,9 @@ export default class GameManager {
 
   init() {
     this.game.init();
-    this.domManager.init();
-    this.listenForNewGame();
-  }
-
-  listenForNewGame() {
+    this.domManager.init(this.game);
     this.domManager.on('reset', () => {
-      this.game.reset();
-      this.game.init();
-      this.domManager.reset(this.game);
-      this.listenForNewGame();
+      this.init();
     })
   }
 }

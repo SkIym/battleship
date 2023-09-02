@@ -20,16 +20,13 @@ export default class Game {
     this.currentPlayer = this.player;
   }
 
-  reset() {
+  init() {
     this.playerBoard.reset();
     this.enemyBoard.reset();
     this.player.reset();
     this.computer.reset();
     this.currentPlayer = this.player;
     this.eventListeners = {};
-  }
-
-  init() {
     this.player.setBoard([[[5, 1], new Ship(1)]])
     this.placeComputerShips();
     this.on('turnEnd', (currentPlayer) => {
