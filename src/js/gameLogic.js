@@ -1,7 +1,13 @@
 import Player from "./player";
 import Gameboard from "./gameboard";
 import Ship from "./ship";
-// import BoardRenderer from "./view";
+
+// 1 four
+// 2 three
+// 3 two
+// 4 one
+
+const SHIP_LENGTHS = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
 
 export default class Game {
 
@@ -25,8 +31,7 @@ export default class Game {
 
   init() {
     this.player.setBoard([[[5, 1], new Ship(1)]])
-    this.computer.setBoard([[[6, 5], new Ship(3)]])
-    this.computer.setBoard([[[4, 3], new Ship(2)]])
+    this.placeComputerShips();
     this.on('turnEnd', (currentPlayer) => {
       if (currentPlayer.name === 'comp') {
         setTimeout(() => this.computerAttacks(), 400)
@@ -78,7 +83,17 @@ export default class Game {
   }
 
   placeComputerShips() {
+    // this.computer.setBoard([[[6, 5], new Ship(3)]])
+    // this.computer.setBoard([[[4, 3], new Ship(2)]])
+    SHIP_LENGTHS.forEach((length) => {
+      const dir = Math.random() > 0.5
+      this.placeComputerShipsHelper(length, dir)
+      })
+  }
 
+  placeComputerShipsHelper(length, dir) {
+    if (this.enemyBoard.placeShip([parseInt(Math.random() * 10, 10), parseInt(Math.random() * 10, 10)], new Ship(length), dir)) return true
+    return this.placeComputerShipsHelper(length, dir)
   }
 
   // pub-sub
