@@ -104,8 +104,7 @@ export default class BoardRenderer {
       })
     })
     this.turnUI.textContent = 'BATTLESHIP';
-    this.playerBoard.style.pointerEvents = 'none';
-    this.enemyBoard.style.pointerEvents = 'auto';
+    this.togglePlay(this.game.currentPlayer)
   }
 
   // Subscribe to an event

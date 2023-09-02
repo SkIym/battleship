@@ -74,7 +74,7 @@ export default class Game {
   }
 
   placePlayerShips() {
-
+    
   }
 
   placeComputerShips() {

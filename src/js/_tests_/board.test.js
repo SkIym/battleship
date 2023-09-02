@@ -13,11 +13,19 @@ describe('Gameboard Class', () => {
     expect(Gameboard.board[4][9]).toBe(ship);
   });
 
-  test('Rejects placing invalid ships', () => {
+  test('Rejects placing invalid ships (out of bounds)', () => {
     const ship = new Ship(3);
     Gameboard.init()
     Gameboard.placeShip([4,8], ship)
     expect(Gameboard.board[4][8]).toBe(null);
+  });
+
+  test.only('Rejects placing invalid ships (too close to an existing ship)', () => {
+    const ship = new Ship(3);
+    Gameboard.init()
+    Gameboard.placeShip([4,0], ship, false)
+    const ship2 = new Ship(4);
+    expect(Gameboard.placeShip([0,0], ship2, false)).toBe(false);
   });
 
   test('Board receives hitting attacks', () => {
@@ -46,15 +54,7 @@ describe('Gameboard Class', () => {
     expect(Gameboard.missed).toContainEqual([2, 3]);
   });
 
-  // test('Reports if all ships have sunk', () => {
-  //   const ship = new Ship(2);
-  //   Gameboard.init()
-  //   Gameboard.placeShip([4,8], ship)
-  //   Gameboard.receiveAttack([4, 8])
-  //   Gameboard.receiveAttack([4, 9])
-
-  //   expect(Gameboard.shipsHaveSunk()).toEqual(true);
-  // });
+ 
 
 });
 

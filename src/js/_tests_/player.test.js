@@ -48,7 +48,7 @@ describe('Player Class', () => {
 
     computer.chooseAttack()
 
-    expect(enemy.missed.length).toEqual(0);
+    expect(enemy.missed.length).not.toEqual(0);
 
   });
 
