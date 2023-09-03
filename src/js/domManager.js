@@ -17,6 +17,7 @@ export default class BoardRenderer {
     this.resetBoard();
     this.game = game;
     this.subscribe();
+    // dom.initPlayerShips(this.game.shipLengths);
   }
 
   setUpTiles() {
@@ -92,10 +93,15 @@ export default class BoardRenderer {
 
   disableBoard(winner) {
     this.turnUI.textContent = `${winner} wins!`;
-    this.enemyBoard.style.pointerEvents = 'none';
-    this.playerBoard.style.pointerEvents = 'none';
     dom.again.style.display = 'block';
     dom.again.textContent = 'Play Again';
+    this.freezeBoards();
+    
+  }
+
+  freezeBoards() {
+    this.enemyBoard.style.pointerEvents = 'none';
+    this.playerBoard.style.pointerEvents = 'none';
   }
 
   resetBoard() {

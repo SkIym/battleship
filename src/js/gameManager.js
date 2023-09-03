@@ -7,6 +7,7 @@ export default class GameManager {
     this.domManager = new BoardRenderer(this.game);
   }
 
+
   init() {
     this.game.init();
     this.domManager.init(this.game);
