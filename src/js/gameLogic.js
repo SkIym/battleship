@@ -28,7 +28,7 @@ export default class Game {
     this.computer.reset();
     this.currentPlayer = this.player;
     this.eventListeners = {};
-    this.placeShips(this.playerBoard);
+    this.playerPlaceShips();
     this.placeShips(this.enemyBoard);
     this.on('turnEnd', (currentPlayer) => {
       if (currentPlayer.name === 'comp') {
@@ -74,6 +74,10 @@ export default class Game {
       this.emit('over', this.currentPlayer.name)
       return true
     }
+  }
+
+  playerPlaceShips() {
+    this.placeShips(this.playerBoard);
   }
 
   placeShips(board) {

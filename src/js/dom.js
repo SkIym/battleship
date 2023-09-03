@@ -1,5 +1,4 @@
 const boards = document.querySelectorAll('.board');
-// const boardContainer = document.querySelectorAll('.board-container');
 export const playerBoard = document.getElementById('player-board');
 
 boards.forEach((b) => {

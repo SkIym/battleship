@@ -11,6 +11,7 @@ export default class GameManager {
   init() {
     this.game.init();
     this.domManager.init(this.game);
+    this.game.emit('placed')
     this.domManager.on('reset', () => {
       this.init();
     })

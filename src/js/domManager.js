@@ -53,8 +53,9 @@ export default class BoardRenderer {
     this.game.on('over', (winner) => {
       this.disableBoard(winner);
     })
-
-   
+    this.game.on('placed', () => {
+      this.highlightPlayerShips();
+    })
     dom.again.addEventListener('click', () => {
       dom.again.style.display = 'none';
       this.emit('reset')
@@ -115,27 +116,39 @@ export default class BoardRenderer {
     this.togglePlay(this.game.currentPlayer)
   }
 
+  highlightPlayerShips() {
+    dom.playerTiles.forEach((tile) => {
+      const coord = [
+        parseInt(tile.id.charAt(0), 10), 
+        parseInt(tile.id.charAt(2), 10)
+      ]
+      if (this.game.playerBoard.board[coord[0]][coord[1]]) {
+        tile.style.backgroundColor = 'yellow';
+      }
+    });
+  };
+
   // Subscribe to an event
-  on(event, listener) {
-    if (!this.eventListeners[event]) {
-      this.eventListeners[event] = [];
+  on(e, listener) {
+    if (!this.eventListeners[e]) {
+      this.eventListeners[e] = [];
     }
-    this.eventListeners[event].push(listener);
+    this.eventListeners[e].push(listener);
   }
 
   // Unsubscribe from an event
-  off(event, listener) {
-    if (this.eventListeners[event]) {
-      this.eventListeners[event] = this.eventListeners[event].filter(
+  off(e, listener) {
+    if (this.eventListeners[e]) {
+      this.eventListeners[e] = this.eventListeners[e].filter(
         (existingListener) => existingListener !== listener
       );
     }
   }
 
   // Emit listeners of the event
-  emit(event, data) {
-    if (this.eventListeners[event]) {
-      this.eventListeners[event].forEach((listener) => {
+  emit(e, data) {
+    if (this.eventListeners[e]) {
+      this.eventListeners[e].forEach((listener) => {
         listener(data);
       });
     }
