@@ -4,10 +4,9 @@ export const playerBoard = document.getElementById('player-board');
 boards.forEach((b) => {
   const board = b;
   board.style.display = 'grid';
-  board.style.position = 'relative';
   board.style.border = '1px solid black';
-  board.style.gridTemplateColumns = 'repeat(10, 40px)';
-  board.style.gridTemplateRows = 'repeat(10, 40px)';
+  board.style.gridTemplateColumns = 'repeat(10, max(3.5vw))';
+  board.style.gridTemplateRows = 'repeat(10, max(3.5vw))';
   for(let i = 0; i < 10; i += 1) {
     for(let j = 0; j < 10; j += 1) {
       const tile = document.createElement('div');

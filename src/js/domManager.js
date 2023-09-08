@@ -59,11 +59,13 @@ export default class BoardRenderer {
     this.game.on('placed', () => {
       this.highlightPlayerShips();
     })
+
     dom.again.addEventListener('click', () => {
       dom.again.style.display = 'none';
       this.playerPlacingBoard();
       this.emit('reset')
     })
+
     dom.start.addEventListener('click', () => {
       dom.start.style.display = 'none';
       this.gameStartBoard();
