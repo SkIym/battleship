@@ -62,13 +62,14 @@ export default class Game {
       this.emit('hit', id);
       if (hit.isSunk()) {
         console.log('ship sunk')
-        this.currentPlayer.targetShip = null;
-        this.currentPlayer.targetStack = [];
-        this.currentPlayer.lastHitTile = null;
+        this.currentPlayer.resetAttackChain();
       } else {
         this.currentPlayer.targetShip = hit;
       }
+
       this.currentPlayer.lastHitTile = this.currentPlayer.targetTile;
+      if(!this.currentPlayer.firstHit) this.currentPlayer.blockAdjacentTiles(this.currentPlayer.lastHitTile);
+      this.currentPlayer.firstHit = false;
     }
     else {
       this.emit('miss', id);

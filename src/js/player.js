@@ -9,12 +9,22 @@ export default class Player {
     this.targetTile = null;
     this.targetStack = [];
     this.lastHitTile = null;
+    this.firstHit = true;
   }
 
   reset() {
     this.moves = [];
     this.targetShip = null;
     this.targetTile = null;
+    this.targetStack = [];
+    this.lastHitTile = null;
+  }
+
+  resetAttackChain() {
+    this.targetShip = null;
+    this.targetStack = [];
+    this.lastHitTile = null;
+    this.firstHit = true;
   }
 
   setBoard(pieces) {
@@ -22,6 +32,20 @@ export default class Player {
       const [coord, ship] = piece;
       this.playerBoard.placeShip(coord, ship);
     });
+  }
+
+  blockAdjacentTiles([x, y]) {
+    [
+      [x + 1, y],
+      [x - 1, y],
+      [x, y + 1],
+      [x, y - 1]
+    ].forEach(move => {
+      const [a, b] = move;
+      if (a >= 0 && a <= 9 && b >= 0 && b <= 9 && !this.enemyBoard.board[a][b]) {
+        this.moves.push(move);
+      }
+    })
   }
 
   attackEnemy(coord) {
@@ -61,7 +85,6 @@ export default class Player {
     
     
     return this.attackEnemy(coord);
-
 
   }
 
