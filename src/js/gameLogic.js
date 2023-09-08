@@ -21,20 +21,20 @@ export default class Game {
     this.shipLengths = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
   }
 
-  init() {
+  reset() {
     this.playerBoard.reset();
     this.enemyBoard.reset();
     this.player.reset();
     this.computer.reset();
     this.currentPlayer = this.player;
     this.eventListeners = {};
+    this.init()
+  }
+
+  init() {
     this.playerPlaceShips();
-    this.placeShips(this.enemyBoard);
-    this.on('turnEnd', (currentPlayer) => {
-      if (currentPlayer.name === 'comp') {
-        setTimeout(() => this.computerAttacks(), 400)
-      }
-    })
+    this.placeShips(this.enemyBoard); // computer (enemy) ships
+    this.onTurnEnd();
   }
 
   playerAttacks(coord, id) {
@@ -54,6 +54,14 @@ export default class Game {
       this.currentPlayer = this.player;
       this.signalTurnEnd();
     }
+  }
+
+  onTurnEnd() {
+    this.on('turnEnd', (currentPlayer) => {
+      if (currentPlayer.name === 'comp') {
+        setTimeout(() => this.computerAttacks(), 400)
+      }
+    })
   }
 
   registerAttack(hit, id) {
@@ -78,6 +86,7 @@ export default class Game {
 
   playerPlaceShips() {
     this.placeShips(this.playerBoard);
+    // drag and drop!
   }
 
   placeShips(board) {

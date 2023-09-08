@@ -7,13 +7,20 @@ export default class GameManager {
     this.domManager = new BoardRenderer(this.game);
   }
 
-
   init() {
     this.game.init();
-    this.domManager.init(this.game);
-    this.game.emit('placed')
+    // Create another module for drag and drop!
+    this.domManager.init();
+    this.playerShipsPlaced();
     this.domManager.on('reset', () => {
-      this.init();
+      this.game.reset();
+      this.domManager.reset(this.game);
+      this.playerShipsPlaced();
     })
   }
+
+  playerShipsPlaced() {
+    this.game.emit('placed');
+  }
+
 }

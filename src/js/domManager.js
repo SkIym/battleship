@@ -11,13 +11,17 @@ export default class BoardRenderer {
     this.setUpTiles();
   }
 
-  init(game) {
-    this.tiles = dom.enemyTiles;
+  reset(game) {
     this.eventListeners = {};
     this.resetBoard();
     this.game = game;
+    this.init();
+  }
+
+  init() {
+    this.tiles = dom.enemyTiles;
     this.subscribe();
-    // dom.initPlayerShips(this.game.shipLengths);
+    this.playerPlacingBoard();
   }
 
   setUpTiles() {
@@ -34,7 +38,6 @@ export default class BoardRenderer {
       });
       tileNo += 1;
     });
-    dom.again.textContent = 'Start';
   }
 
   subscribe() {
@@ -51,14 +54,19 @@ export default class BoardRenderer {
       this.togglePlay(currentPlayer);
     });
     this.game.on('over', (winner) => {
-      this.disableBoard(winner);
+      this.gameOverBoard(winner);
     })
     this.game.on('placed', () => {
       this.highlightPlayerShips();
     })
     dom.again.addEventListener('click', () => {
       dom.again.style.display = 'none';
+      this.playerPlacingBoard();
       this.emit('reset')
+    })
+    dom.start.addEventListener('click', () => {
+      dom.start.style.display = 'none';
+      this.gameStartBoard();
     })
   }
 
@@ -92,12 +100,24 @@ export default class BoardRenderer {
     }
   }
 
-  disableBoard(winner) {
+  playerPlacingBoard() {
+    this.turnUI.textContent = 'Place your ships!';
+    dom.again.style.display = 'none';
+    dom.start.style.display = 'block';
+    this.enemyBoard.style.pointerEvents = 'none';
+    this.playerBoard.style.pointerEvents = 'auto';
+  }
+
+  gameStartBoard() {
+    this.turnUI.textContent = "Player's Turn";
+    this.enemyBoard.style.pointerEvents = 'auto';
+    this.playerBoard.style.pointerEvents = 'none';
+  }
+
+  gameOverBoard(winner) {
     this.turnUI.textContent = `${winner} wins!`;
     dom.again.style.display = 'block';
-    dom.again.textContent = 'Play Again';
     this.freezeBoards();
-    
   }
 
   freezeBoards() {
@@ -113,7 +133,6 @@ export default class BoardRenderer {
       })
     })
     this.turnUI.textContent = 'BATTLESHIP';
-    this.togglePlay(this.game.currentPlayer)
   }
 
   highlightPlayerShips() {

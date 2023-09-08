@@ -9,3 +9,7 @@
   background-color: rgb(207, 213, 218);
   cursor: pointer;
 }
+
+#player-board > .tile:hover {
+  cursor: grab;
+}

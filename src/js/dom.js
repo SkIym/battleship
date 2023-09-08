@@ -24,4 +24,5 @@ export const enemyBoard = document.getElementById('computer-board');
 export const enemyTiles = document.querySelectorAll('#computer-board > .tile');
 export const playerTiles = document.querySelectorAll('#player-board > .tile');
 export const turn = document.getElementById('turn-indicator');
-export const again = document.getElementById('play-again')
+export const again = document.getElementById('play-again');
+export const start = document.getElementById('start-game');
