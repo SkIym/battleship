@@ -71,7 +71,7 @@ export default class Gameboard {
     if(ship) {
       ship.hit()
       this.shipParts -= 1;
-      return true
+      return ship
     }
     this.missed.push(coord)
     return false

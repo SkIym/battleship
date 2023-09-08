@@ -47,7 +47,8 @@ export default class Game {
   }
 
   computerAttacks() {
-    const hit = this.computer.chooseAttack();
+    console.log(this.computer.targetShip)
+    const hit = this.computer.targetShip ? this.computer.continueAttack(this.computer.lastHitTile) : this.computer.chooseAttack();
     const id = this.computer.targetTile[0] * 10 + this.computer.targetTile[1];
     const gameOver = this.registerAttack(hit, id);
     if(!gameOver) {
@@ -56,20 +57,33 @@ export default class Game {
     }
   }
 
+  registerAttack(hit, id) {
+    if (hit) {
+      this.emit('hit', id);
+      if (hit.isSunk()) {
+        console.log('ship sunk')
+        this.currentPlayer.targetShip = null;
+        this.currentPlayer.targetStack = [];
+        this.currentPlayer.lastHitTile = null;
+      } else {
+        this.currentPlayer.targetShip = hit;
+      }
+      this.currentPlayer.lastHitTile = this.currentPlayer.targetTile;
+    }
+    else {
+      this.emit('miss', id);
+    }
+    
+    return this.isGameOver();
+  }
+
+  
   onTurnEnd() {
     this.on('turnEnd', (currentPlayer) => {
       if (currentPlayer.name === 'comp') {
         setTimeout(() => this.computerAttacks(), 400)
       }
     })
-  }
-
-  registerAttack(hit, id) {
-    if (hit) {
-      this.emit('hit', id);
-    }
-    else this.emit('miss', id);
-    return this.isGameOver();
   }
 
   signalTurnEnd() {
