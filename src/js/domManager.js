@@ -72,6 +72,11 @@ export default class BoardRenderer {
     this.game.on('blockIfShipSunk', (ids) => {
       ids.forEach(id => {this.blockTiles(id)})
       this.playSound('sunk');
+      if (this.game.currentPlayer.name === 'player') {
+        dom.playerIndicator.textContent = 'You sunk a ship!'
+      } else {
+        dom.compIndicator.textContent = 'Enemy sunk a ship!'
+      }
     })
 
     dom.again.addEventListener('click', () => {
@@ -89,10 +94,20 @@ export default class BoardRenderer {
 
   renderHit(id) {
     this.tiles[id].style.backgroundColor = 'white';
+    if (this.game.currentPlayer.name === 'player') {
+      dom.playerIndicator.textContent = 'You hit a ship!'
+    } else {
+      dom.compIndicator.textContent = 'Enemy hit a ship!'
+    }
   }
 
   renderMiss(id) {
     this.tiles[id].style.backgroundColor = 'rgb(11, 51, 68)';
+    if (this.game.currentPlayer.name === 'player') {
+      dom.playerIndicator.textContent = 'You missed'
+    } else {
+      dom.compIndicator.textContent = 'Enemy missed'
+    }
   }
 
   blockTiles(id) {
@@ -180,7 +195,6 @@ export default class BoardRenderer {
   }
 
   resetBoard() {
-    console.log('Resetting');
     [dom.enemyTiles, dom.playerTiles].forEach((board) => {
       board.forEach((tile) => {
         tile.style.backgroundColor = '';
@@ -188,6 +202,8 @@ export default class BoardRenderer {
       })
     })
     this.turnUI.textContent = 'BATTLESHIP';
+    dom.playerIndicator.textContent = '---';
+    dom.compIndicator.textContent = '---';
   }
 
   highlightPlayerShips() {
@@ -208,7 +224,7 @@ export default class BoardRenderer {
     } else if (sound === 'hit') {
       await dom.shipHit.play();
     } else if(sound ==='miss') {
-      // water sound
+      await dom.miss.play();
     } else if(sound === 'place'){
       await dom.placingShip.play();
     } else {
@@ -222,7 +238,7 @@ export default class BoardRenderer {
     } else if (sound === 'hit') {
       dom.shipHit.pause();
     } else if(sound ==='miss') {
-      // water sound
+      dom.miss.pause();
     } else if(sound === 'place'){
       dom.placingShip.pause();
     } else {

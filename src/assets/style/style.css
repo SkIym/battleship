@@ -9,10 +9,15 @@ main {
   background-color: white;
 }
 
+.tile {
+  transition: all 0.2s ease-in-out;
+}
+
 #computer-board > .tile:hover {
   background-color: rgb(112, 162, 184);
   background-color: rgb(29, 115, 152);
   cursor: pointer;
+  scale: 0.94;
 }
 
 #player-board > .tile:hover {
@@ -22,5 +27,20 @@ main {
 button {
   padding: 5px 20px;
   font-size: 1rem;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.indicator, .title {
+  padding: 20px;
+}
+
+.indicator {
+  color: brown;
+  font-size: 1.3rem;
 }
 
