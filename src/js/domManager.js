@@ -142,7 +142,6 @@ export default class BoardRenderer {
         tilesToHighlight[loc].style.backgroundColor = tilesToHighlight[loc].style.backgroundColor === 'rgb(11, 51, 68)' ? 'rgb(11, 51, 68)' : 'rgb(112, 162, 184)';
         if(!this.game.currentPlayer.enemyBoard.board[a][b])
           this.game.currentPlayer.toBlockIfShipSunk.push(loc);
-          this.game.currentPlayer.moves.push(tile);
       }
     })
     

@@ -66,6 +66,10 @@ export default class Game {
 
       if (shipSunk) {
         this.emit('blockIfShipSunk', this.currentPlayer.toBlockIfShipSunk)
+        this.currentPlayer.toBlockIfShipSunk.forEach(tile => {
+          const [x,y] = [parseInt(tile / 10, 10), tile % 10]
+          this.currentPlayer.moves.push([x,y])
+        })
         this.currentPlayer.resetAttackChain();
       }
     }
