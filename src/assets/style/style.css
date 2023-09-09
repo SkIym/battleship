@@ -3,13 +3,24 @@
   padding: 0;
   box-sizing: border-box;
   outline: none;
+  font-family: 'Josefin Sans', sans-serif;
+}
+main {
+  background-color: white;
 }
 
 #computer-board > .tile:hover {
-  background-color: rgb(207, 213, 218);
+  background-color: rgb(112, 162, 184);
+  background-color: rgb(29, 115, 152);
   cursor: pointer;
 }
 
 #player-board > .tile:hover {
   cursor: grab;
 }
+
+button {
+  padding: 5px 20px;
+  font-size: 1rem;
+}
+

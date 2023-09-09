@@ -22,6 +22,7 @@ export default class BoardRenderer {
     this.tiles = dom.enemyTiles;
     this.subscribe();
     this.playerPlacingBoard();
+    this.playSound('place');
   }
 
   setUpTiles() {
@@ -41,12 +42,14 @@ export default class BoardRenderer {
   }
 
   subscribe() {
-    this.game.on('hit', (id) => {
+    this.game.on('hit', async (id) => {
       this.renderHit(id);
+      await this.playSound('hit');
       this.toggleTiles();
     });
-    this.game.on('miss', (id) => {
-      this.renderMiss(id)
+    this.game.on('miss', async (id) => {
+      this.renderMiss(id);
+      await this.playSound('miss');
       this.toggleTiles();
     });
     this.game.on('turnEnd', (currentPlayer) => {
@@ -55,6 +58,7 @@ export default class BoardRenderer {
     });
     this.game.on('over', (winner) => {
       this.gameOverBoard(winner);
+      this.playSound('gameover');
     })
     this.game.on('placed', () => {
       this.highlightPlayerShips();
@@ -67,6 +71,7 @@ export default class BoardRenderer {
     })
     this.game.on('blockIfShipSunk', (ids) => {
       ids.forEach(id => {this.blockTiles(id)})
+      this.playSound('sunk');
     })
 
     dom.again.addEventListener('click', () => {
@@ -78,23 +83,24 @@ export default class BoardRenderer {
     dom.start.addEventListener('click', () => {
       dom.start.style.display = 'none';
       this.gameStartBoard();
+      this.stopSound('place');
     })
   }
 
   renderHit(id) {
-    this.tiles[id].style.backgroundColor = 'red';
+    this.tiles[id].style.backgroundColor = 'white';
   }
 
   renderMiss(id) {
-    this.tiles[id].style.backgroundColor = 'gray';
+    this.tiles[id].style.backgroundColor = 'rgb(11, 51, 68)';
   }
 
   blockTiles(id) {
     if (this.game.currentPlayer.name === 'player') {
-      dom.enemyTiles[id].style.backgroundColor = 'gray';
+      dom.enemyTiles[id].style.backgroundColor = 'rgb(11, 51, 68)';
       dom.enemyTiles[id].style.pointerEvents = 'none';
     } else {
-      dom.playerTiles[id].style.backgroundColor = 'gray';
+      dom.playerTiles[id].style.backgroundColor = 'rgb(11, 51, 68)';
       dom.playerTiles[id].style.pointerEvents = 'none';
     }
   }
@@ -118,7 +124,7 @@ export default class BoardRenderer {
       const [a,b] = tile;
       if (a >= 0 && a <= 9 && b >= 0 && b <= 9) {
         const loc = (a * 10) + b;
-        tilesToHighlight[loc].style.backgroundColor = tilesToHighlight[loc].style.backgroundColor === 'gray' ? 'gray' : 'pink';
+        tilesToHighlight[loc].style.backgroundColor = tilesToHighlight[loc].style.backgroundColor === 'rgb(11, 51, 68)' ? 'rgb(11, 51, 68)' : 'rgb(112, 162, 184)';
         if(!this.game.currentPlayer.enemyBoard.board[a][b])
           this.game.currentPlayer.toBlockIfShipSunk.push(loc);
       }
@@ -174,6 +180,7 @@ export default class BoardRenderer {
   }
 
   resetBoard() {
+    console.log('Resetting');
     [dom.enemyTiles, dom.playerTiles].forEach((board) => {
       board.forEach((tile) => {
         tile.style.backgroundColor = '';
@@ -194,6 +201,34 @@ export default class BoardRenderer {
       }
     });
   };
+
+  async playSound(sound) {
+    if (sound === 'gameover') {
+      await dom.gameOver.play();
+    } else if (sound === 'hit') {
+      await dom.shipHit.play();
+    } else if(sound ==='miss') {
+      // water sound
+    } else if(sound === 'place'){
+      await dom.placingShip.play();
+    } else {
+      await dom.shipSunk.play();
+    }
+  }
+
+  stopSound(sound) {
+    if (sound === 'gameover') {
+      dom.gameOver.pause();
+    } else if (sound === 'hit') {
+      dom.shipHit.pause();
+    } else if(sound ==='miss') {
+      // water sound
+    } else if(sound === 'place'){
+      dom.placingShip.pause();
+    } else {
+      dom.shipSunk.pause();
+    }
+  }
 
   // Subscribe to an event
   on(e, listener) {

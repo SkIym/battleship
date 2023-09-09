@@ -2,13 +2,6 @@ import Player from "./player";
 import Gameboard from "./gameboard";
 import Ship from "./ship";
 
-// 1 four
-// 2 three
-// 3 two
-// 4 one
-
-
-
 export default class Game {
 
   constructor() {
@@ -100,7 +93,6 @@ export default class Game {
         this.emit('block', [id])
       }
     })
-    console.log('Blockign')
   }
 
   

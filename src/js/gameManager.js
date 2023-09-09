@@ -12,10 +12,15 @@ export default class GameManager {
     // Create another module for drag and drop!
     this.domManager.init();
     this.playerShipsPlaced();
+    this.reset();
+  }
+
+  reset() {
     this.domManager.on('reset', () => {
       this.game.reset();
       this.domManager.reset(this.game);
       this.playerShipsPlaced();
+      this.reset()
     })
   }
 
