@@ -72,6 +72,7 @@ export default class Game {
       }
 
       if (shipSunk) {
+        this.emit('blockIfShipSunk', this.currentPlayer.toBlockIfShipSunk)
         this.currentPlayer.resetAttackChain();
       }
     }

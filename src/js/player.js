@@ -9,6 +9,7 @@ export default class Player {
     this.targetTile = null;
     this.targetStack = [];
     this.lastHitTile = null;
+    this.toBlockIfShipSunk = [];
   }
 
   reset() {
@@ -23,6 +24,7 @@ export default class Player {
     this.targetShip = null;
     this.targetStack = [];
     this.lastHitTile = null;
+    this.toBlockIfShipSunk = [];
   }
 
   setBoard(pieces) {

@@ -65,6 +65,9 @@ export default class BoardRenderer {
     this.game.on('firstHit', (id) => {
       this.clueOnFirstHit(id);
     })
+    this.game.on('blockIfShipSunk', (ids) => {
+      ids.forEach(id => {this.blockTiles(id)})
+    })
 
     dom.again.addEventListener('click', () => {
       dom.again.style.display = 'none';
@@ -88,28 +91,40 @@ export default class BoardRenderer {
 
   blockTiles(id) {
     if (this.game.currentPlayer.name === 'player') {
-      dom.enemyTiles[id].style.backgroundColor = 'black';
+      dom.enemyTiles[id].style.backgroundColor = 'gray';
       dom.enemyTiles[id].style.pointerEvents = 'none';
     } else {
-      dom.playerTiles[id].style.backgroundColor = 'black';
+      dom.playerTiles[id].style.backgroundColor = 'gray';
       dom.playerTiles[id].style.pointerEvents = 'none';
     }
   }
 
-  // clueOnFirstHit(id) {
-  //   const [x,y] = id
-  //   const toHighlight = [
-  //     [x + 1, y],
-  //     [x - 1, y],
-  //     [x, y + 1],
-  //     [x, y - 1]
-  //   ];
+  clueOnFirstHit(id) {
+    const [x,y] = id
+    const toHighlight = [
+      [x + 1, y],
+      [x - 1, y],
+      [x, y + 1],
+      [x, y - 1],
+      [x+1, y+1],
+      [x+1, y-1],
+      [x-1, y+1],
+      [x-1, y-1]
+    ];
 
-  //   const tilesToHighlight = this.game.currentPlayer.name === 'player' ? dom.enemyTiles : dom.playerTiles;
+    const tilesToHighlight = this.game.currentPlayer.name === 'player' ? dom.enemyTiles : dom.playerTiles;
 
-
+    toHighlight.forEach(tile => {
+      const [a,b] = tile;
+      if (a >= 0 && a <= 9 && b >= 0 && b <= 9) {
+        const loc = (a * 10) + b;
+        tilesToHighlight[loc].style.backgroundColor = tilesToHighlight[loc].style.backgroundColor === 'gray' ? 'gray' : 'pink';
+        if(!this.game.currentPlayer.enemyBoard.board[a][b])
+          this.game.currentPlayer.toBlockIfShipSunk.push(loc);
+      }
+    })
     
-  // }
+  }
 
   toggleTiles() {
     this.tiles = (this.tiles === dom.enemyTiles) ? dom.playerTiles : dom.enemyTiles 
