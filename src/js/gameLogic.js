@@ -47,7 +47,6 @@ export default class Game {
   }
 
   computerAttacks() {
-    console.log(this.computer.targetShip)
     const hit = this.computer.targetShip ? this.computer.continueAttack(this.computer.lastHitTile) : this.computer.chooseAttack();
     const id = this.computer.targetTile[0] * 10 + this.computer.targetTile[1];
     const gameOver = this.registerAttack(hit, id);
@@ -59,23 +58,48 @@ export default class Game {
 
   registerAttack(hit, id) {
     if (hit) {
+      const shipSunk = hit.isSunk();
+
       this.emit('hit', id);
-      if (hit.isSunk()) {
-        console.log('ship sunk')
-        this.currentPlayer.resetAttackChain();
+      this.currentPlayer.targetShip = hit;
+      this.currentPlayer.lastHitTile = this.currentPlayer.targetTile;
+
+
+      if(this.currentPlayer.targetShip.hits > 1 || shipSunk) {
+        this.blockAdjacentTiles(this.currentPlayer.lastHitTile, this.currentPlayer.enemyBoard.board, shipSunk);
       } else {
-        this.currentPlayer.targetShip = hit;
+        this.emit('firstHit', this.currentPlayer.lastHitTile)
       }
 
-      this.currentPlayer.lastHitTile = this.currentPlayer.targetTile;
-      if(!this.currentPlayer.firstHit) this.currentPlayer.blockAdjacentTiles(this.currentPlayer.lastHitTile);
-      this.currentPlayer.firstHit = false;
+      if (shipSunk) {
+        this.currentPlayer.resetAttackChain();
+      }
     }
     else {
       this.emit('miss', id);
     }
     
     return this.isGameOver();
+  }
+
+  blockAdjacentTiles([x, y], board, lastTile) {
+    const toBlock = [
+      [x + 1, y],
+      [x - 1, y],
+      [x, y + 1],
+      [x, y - 1],
+    ]
+    if(lastTile) toBlock.push([x+1, y+1],[x+1, y-1],[x-1, y+1],[x-1, y-1])
+    
+    toBlock.forEach(move => {
+      const [a, b] = move;
+      if (a >= 0 && a <= 9 && b >= 0 && b <= 9 && !board[a][b]) {
+        this.currentPlayer.moves.push(move);
+        const id = (a * 10) + b
+        this.emit('block', [id])
+      }
+    })
+    console.log('Blockign')
   }
 
   

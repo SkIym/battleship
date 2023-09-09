@@ -59,6 +59,12 @@ export default class BoardRenderer {
     this.game.on('placed', () => {
       this.highlightPlayerShips();
     })
+    this.game.on('block', (id) => {
+      this.blockTiles(id);
+    })
+    this.game.on('firstHit', (id) => {
+      this.clueOnFirstHit(id);
+    })
 
     dom.again.addEventListener('click', () => {
       dom.again.style.display = 'none';
@@ -79,6 +85,31 @@ export default class BoardRenderer {
   renderMiss(id) {
     this.tiles[id].style.backgroundColor = 'gray';
   }
+
+  blockTiles(id) {
+    if (this.game.currentPlayer.name === 'player') {
+      dom.enemyTiles[id].style.backgroundColor = 'black';
+      dom.enemyTiles[id].style.pointerEvents = 'none';
+    } else {
+      dom.playerTiles[id].style.backgroundColor = 'black';
+      dom.playerTiles[id].style.pointerEvents = 'none';
+    }
+  }
+
+  // clueOnFirstHit(id) {
+  //   const [x,y] = id
+  //   const toHighlight = [
+  //     [x + 1, y],
+  //     [x - 1, y],
+  //     [x, y + 1],
+  //     [x, y - 1]
+  //   ];
+
+  //   const tilesToHighlight = this.game.currentPlayer.name === 'player' ? dom.enemyTiles : dom.playerTiles;
+
+
+    
+  // }
 
   toggleTiles() {
     this.tiles = (this.tiles === dom.enemyTiles) ? dom.playerTiles : dom.enemyTiles 

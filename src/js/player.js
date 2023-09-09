@@ -9,7 +9,6 @@ export default class Player {
     this.targetTile = null;
     this.targetStack = [];
     this.lastHitTile = null;
-    this.firstHit = true;
   }
 
   reset() {
@@ -24,7 +23,6 @@ export default class Player {
     this.targetShip = null;
     this.targetStack = [];
     this.lastHitTile = null;
-    this.firstHit = true;
   }
 
   setBoard(pieces) {
@@ -32,20 +30,6 @@ export default class Player {
       const [coord, ship] = piece;
       this.playerBoard.placeShip(coord, ship);
     });
-  }
-
-  blockAdjacentTiles([x, y]) {
-    [
-      [x + 1, y],
-      [x - 1, y],
-      [x, y + 1],
-      [x, y - 1]
-    ].forEach(move => {
-      const [a, b] = move;
-      if (a >= 0 && a <= 9 && b >= 0 && b <= 9 && !this.enemyBoard.board[a][b]) {
-        this.moves.push(move);
-      }
-    })
   }
 
   attackEnemy(coord) {
@@ -65,9 +49,7 @@ export default class Player {
 
   continueAttack(prevTile) {
     const [x, y] = prevTile;
-    console.log('previous hit tile', prevTile);
 
-    
     this.targetStack.unshift(...Player.shuffleArray([
       [x + 1, y],
       [x - 1, y],
@@ -80,9 +62,6 @@ export default class Player {
     (this.moves.find((move) => move[0] === coord[0] && move[1] === coord[1]))) {
       coord = this.targetStack.shift();
     }
-    console.log('current stack', this.targetStack)
-    console.log('picked tile', coord)
-    
     
     return this.attackEnemy(coord);
 
