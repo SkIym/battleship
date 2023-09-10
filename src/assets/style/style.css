@@ -1,9 +1,11 @@
-*, ::before, ::after {
+*,
+::before,
+::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   outline: none;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: "Josefin Sans", sans-serif;
 }
 main {
   background-color: white;
@@ -35,7 +37,8 @@ button {
   align-items: center;
 }
 
-.indicator, .title {
+.indicator,
+.title {
   padding: 20px;
 }
 
@@ -43,4 +46,3 @@ button {
   color: brown;
   font-size: 1.3rem;
 }
-

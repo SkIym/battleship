@@ -16,16 +16,15 @@ export default class GameManager {
   }
 
   reset() {
-    this.domManager.on('reset', () => {
+    this.domManager.on("reset", () => {
       this.game.reset();
       this.domManager.reset(this.game);
       this.playerShipsPlaced();
-      this.reset()
-    })
+      this.reset();
+    });
   }
 
   playerShipsPlaced() {
-    this.game.emit('placed');
+    this.game.emit("placed");
   }
-
 }
